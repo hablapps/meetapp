@@ -13,56 +13,38 @@ import scala.slick.driver.MySQLDriver.simple._
 
 object Interpreter{
 
-  def run[U](store: Store[U]): Either[StoreError, U] = store match {
-    case Return(result) => 
-      Right(result)
-    case GetGroup(id: Int, next: (Group => Store[U])) => 
+  def run[U](store: Store[U]): U = store match {
+
+    case GetGroup(gid: Int, next: (Group => Store[U])) => 
       DB.withSession { implicit session =>
-        group_table.byID(Some(id)).firstOption.fold[Either[StoreError,U]](
-          Left[StoreError,U](NonExistentEntity(id))
-        ){
-          entity => run(next(entity))
-        }
+        val maybeGroup = (for { 
+          group <- group_table if group.gid === gid
+        } yield group).firstOption
+        run(next(maybeGroup.get))
       }
-    case GetUser(id: Int, next: (User => Store[U])) => 
+
+    case GetUser(uid: Int, next: (User => Store[U])) => 
       DB.withSession { implicit session =>
-        user_table.byID(Some(id)).firstOption.fold[Either[StoreError,U]](
-          Left[StoreError,U](NonExistentEntity(id))
-        ){
-          entity => run(next(entity))
-        }
+        val maybeUser = (for {
+          user <- user_table if user.uid === uid
+        } yield user).firstOption
+        run(next(maybeUser.get))
       }
-    case PutMember(member: Member, next: (Member => Store[U])) => 
-      DB.withSession { implicit session =>
-        val mid: Either[StoreError, Int] = try{
-          val maybeId = member_table returning member_table.map(_.mid) += member
-          maybeId.fold[Either[StoreError,Int]](Left(GenericError(s"Could not put new member $member")))(Right(_))
-        } catch {
-          case e : MySQLIntegrityConstraintViolationException => 
-            Left(GenericError(s"Could not put new member $member"))
-        }
-        mid.right
-          .map(id => run(next(member.copy(mid = Some(id)))))
-          .joinRight
-      }
+
     case PutJoin(join: JoinRequest, next: (JoinRequest => Store[U])) => 
       DB.withSession { implicit session =>
-        val jid: Either[StoreError, Int] = try{
-          val maybeId = join_table returning join_table.map(_.jid) += join
-          maybeId.fold[Either[StoreError,Int]](
-            Left(GenericError(s"Could not put new join $join")))(
-            Right(_)
-          )
-        } catch {
-          case e : MySQLIntegrityConstraintViolationException => 
-            Left(GenericError(s"Constraint violation: $e"))
-        }
-        jid.right
-          .map(id => run(next(join.copy(jid = Some(id)))))
-          .joinRight
+        val maybeId = join_table returning join_table.map(_.jid) += join
+        run(next(join.copy(jid = maybeId)))
       }
-    case _ => 
-      Left(new StoreError("unevaluated yet"))
+
+    case PutMember(member: Member, next: (Member => Store[U])) => 
+      DB.withSession { implicit session =>
+        val maybeId = member_table returning member_table.map(_.mid) += member
+        run(next(member.copy(mid = maybeId)))
+      }
+
+    case Return(result) => 
+      result
   }
 
 }

@@ -13,6 +13,8 @@ import scala.slick.driver.MySQLDriver.simple._
 
 trait Store extends logic.Store{
 
+
+
   def getGroup(gid: Int): Group = 
     DB.withSession { implicit session =>
       val maybeGroup = (for { 
@@ -40,6 +42,8 @@ trait Store extends logic.Store{
       val maybeId = member_table returning member_table.map(_.mid) += member
       member.copy(mid = maybeId)
     }
+
+
 
 }
 

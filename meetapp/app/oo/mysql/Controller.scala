@@ -1,4 +1,4 @@
-package org.hablapps.meetup.oo
+package org.hablapps.meetup.oo.mysql
 
 import scala.util.{Try, Success, Failure}
 
@@ -7,14 +7,15 @@ import play.api.mvc._
 import play.api.libs.json._
 
 import org.hablapps.meetup.common.logic.Domain._
-import logic._, mysql._
+import org.hablapps.meetup.oo.logic, logic._
 
 object Members extends Controller{
 
   def add(gid: Int): Action[Int] =
     Action(parse.json[Int]) { 
       fromHTTP(gid) andThen
-      (joinRequest => Try(mysql.Services.join(joinRequest))) andThen
+      (joinRequest => 
+        Try(Services.join(joinRequest))) andThen
       toHTTP
     }
 

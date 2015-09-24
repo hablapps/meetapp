@@ -1,4 +1,4 @@
 
 # Add members
-POST    /oo/groups/:gid/members         org.hablapps.meetup.oo.Members.add(gid: Int)
-POST    /fun/groups/:gid/members        org.hablapps.meetup.fun.Members.add(gid: Int)
+POST    /oo/groups/:gid/members         org.hablapps.meetup.oo.mysql.Members.add(gid: Int)
+POST    /fun/groups/:gid/members        org.hablapps.meetup.fun.mysql.Members.add(gid: Int)
