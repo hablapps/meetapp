@@ -25,8 +25,6 @@ object Members extends Controller{
     response match {
       case Failure(error@NonExistentEntity(id)) => 
         NotFound(s"${error.msg}")
-      case Failure(error@ConstraintFailed(msg)) => 
-        Forbidden(s"$msg")
       case Failure(error) => 
         InternalServerError(error.toString)
       case Success(response) => response fold(

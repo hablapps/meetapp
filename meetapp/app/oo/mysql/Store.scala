@@ -41,15 +41,6 @@ trait Store extends logic.Store{
       member.copy(mid = maybeId)
     }
 
-  def isMember(uid: Int, gid: Int): Boolean = 
-    DB.withSession { implicit session =>
-      true
-    }
-
-  def isPending(uid: Int, gid: Int): Boolean = 
-    DB.withSession { implicit session =>
-      true
-    }
 }
 
 

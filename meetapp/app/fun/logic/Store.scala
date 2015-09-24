@@ -1,14 +1,11 @@
 package org.hablapps.meetup.fun.logic
 
-import scala.reflect.{ClassTag, classTag}
 import org.hablapps.meetup.common.logic.Domain._
 
 sealed trait Store[+U]
 
 case class GetGroup[U](id: Int, next: Group => Store[U]) extends Store[U]
 case class GetUser[U](id: Int, next: User => Store[U]) extends Store[U]
-case class IsMember[U](uid: Int, gid: Int, next: Boolean => Store[U]) extends Store[U]
-case class IsPending[U](uid: Int, gid: Int, next: Boolean => Store[U]) extends Store[U]
 case class PutJoin[U](join: JoinRequest, next: JoinRequest => Store[U]) extends Store[U]
 case class PutMember[U](id: Member, next: Member => Store[U]) extends Store[U]
 case class Return[U](t: U) extends Store[U]
@@ -41,19 +38,11 @@ object Store{
   def putMember(t: Member): Store[Member] = 
     PutMember(t, t1 => Return(t1))
 
-  def isMember(uid: Int, gid: Int): Store[Boolean] = 
-    IsMember(uid, gid, Return(_))
-
-  def isPending(uid: Int, gid: Int): Store[Boolean] = 
-    IsPending(uid, gid, Return(_))
-
   implicit class StoreOps[U](store: Store[U]){
 
     def flatMap[V](f: U => Store[V]): Store[V] = store match {
       case GetUser(id, next) => GetUser(id, next andThen (_ flatMap f))
       case GetGroup(id, next) => GetGroup(id, next andThen (_ flatMap f))
-      case IsMember(uid, gid, next) => IsMember(uid, gid, next andThen (_ flatMap f))
-      case IsPending(uid, gid, next) => IsPending(uid, gid, next andThen (_ flatMap f))
       case PutJoin(t, next) => PutJoin(t, next andThen (_ flatMap f))
       case PutMember(t, next) => PutMember(t, next andThen (_ flatMap f))
       case Return(t) => f(t)
@@ -63,8 +52,6 @@ object Store{
     def map[V](f: U => V): Store[V] = store match {
       case GetUser(id, next) => GetUser(id, next andThen (_ map f))
       case GetGroup(id, next) => GetGroup(id, next andThen (_ map f))
-      case IsMember(uid, gid, next) => IsMember(uid, gid, next andThen (_ map f))
-      case IsPending(uid, gid, next) => IsPending(uid, gid, next andThen (_ map f))
       case PutJoin(t, next) => PutJoin(t, next andThen (_ map f))
       case PutMember(t, next) => PutMember(t, next andThen (_ map f))
       case Return(t) => Return(f(t)) 

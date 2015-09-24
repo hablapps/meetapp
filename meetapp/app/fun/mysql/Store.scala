@@ -38,20 +38,6 @@ object Interpreter{
           entity => run(next(entity))
         }
       }
-    case IsMember(uid, gid, next) => 
-      DB.withSession { implicit session =>
-        val isMemberQuery = for{
-          member <- member_table if member.uid === uid && member.gid === gid
-        } yield member
-        run(next(isMemberQuery.firstOption.isDefined))
-      }
-    case IsPending(uid, gid, next) => 
-      DB.withSession { implicit session =>
-        val isPendingQuery = for{
-          join <- join_table if join.uid === uid && join.gid === gid
-        } yield join
-        run(next(isPendingQuery.firstOption.isDefined))
-      }
     case PutMember(member: Member, next: (Member => Store[U])) => 
       DB.withSession { implicit session =>
         val mid: Either[StoreError, Int] = try{
@@ -59,7 +45,7 @@ object Interpreter{
           maybeId.fold[Either[StoreError,Int]](Left(GenericError(s"Could not put new member $member")))(Right(_))
         } catch {
           case e : MySQLIntegrityConstraintViolationException => 
-            Left(ConstraintFailed(Store.isMember(member.uid, member.gid)))
+            Left(GenericError(s"Could not put new member $member"))
         }
         mid.right
           .map(id => run(next(member.copy(mid = Some(id)))))

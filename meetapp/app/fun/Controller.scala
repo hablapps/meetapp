@@ -31,9 +31,7 @@ object Members extends Controller{
       error => error match {
         case error@NonExistentEntity(id) => 
           NotFound(s"${error.msg}")
-        case error@ConstraintFailed(IsMember(_,_,_)) => 
-          Forbidden(s"${error.msg}")
-        case error@ConstraintFailed(IsPending(_,_,_)) => 
+        case error@ConstraintFailed(msg) => 
           Forbidden(s"${error.msg}")
         case error => 
           InternalServerError(error.msg)
