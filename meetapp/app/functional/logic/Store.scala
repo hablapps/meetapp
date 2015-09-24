@@ -1,4 +1,4 @@
-package org.hablapps.meetup.oo.logic
+package org.hablapps.meetup.functional.logic
 
 import Domain._
 

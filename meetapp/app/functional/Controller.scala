@@ -1,4 +1,4 @@
-package org.hablapps.meetup.oo.controllers
+package org.hablapps.meetup.functional.controllers
 
 import scala.util.{Try, Success, Failure}
 
@@ -6,7 +6,7 @@ import play.api._
 import play.api.mvc._
 import play.api.libs.json._
 
-import org.hablapps.meetup.oo.{logic, mysql}
+import org.hablapps.meetup.functional.{logic, mysql}
 import logic._, mysql._, logic.Domain._
 
 object Members extends Controller{

@@ -1,6 +1,6 @@
-package org.hablapps.meetup.oo.mysql
+package org.hablapps.meetup.functional.mysql
 
-import org.hablapps.meetup.oo.logic, logic._
+import org.hablapps.meetup.functional.logic, logic._
 import logic.Domain._
 import Domain._
 
