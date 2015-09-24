@@ -30,7 +30,6 @@ object Store{
       case PutJoin(t, next) => PutJoin(t, next andThen (_ flatMap f))
       case PutMember(t, next) => PutMember(t, next andThen (_ flatMap f))
       case Return(t) => f(t)
-      case fail@Fail(_) => fail 
     }
 
     def map[V](f: U => V): Store[V] = store match {
@@ -39,7 +38,6 @@ object Store{
       case PutJoin(t, next) => PutJoin(t, next andThen (_ map f))
       case PutMember(t, next) => PutMember(t, next andThen (_ map f))
       case Return(t) => Return(f(t)) 
-      case fail@Fail(_) => fail
     }
 
   }
@@ -53,7 +51,6 @@ case class GetUser[U](id: Int, next: User => Store[U]) extends Store[U]
 case class PutJoin[U](join: JoinRequest, next: JoinRequest => Store[U]) extends Store[U]
 case class PutMember[U](id: Member, next: Member => Store[U]) extends Store[U]
 case class Return[U](t: U) extends Store[U]
-case class Fail(error: StoreError) extends Store[Nothing]
 
 sealed class StoreError(val msg: String) extends RuntimeException
 

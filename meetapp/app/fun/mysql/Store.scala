@@ -1,17 +1,14 @@
 package org.hablapps.meetup.fun.mysql
 
-import scala.reflect.{ClassTag, classTag}
-import scala.slick.driver.MySQLDriver.simple._
-import scala.slick.lifted.CompiledFunction
-import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException
+import org.hablapps.meetup.fun.logic, logic._
+import org.hablapps.meetup.common.logic.Domain._
+import org.hablapps.meetup.common.mysql.Domain._
 
 import play.api.db.slick.DB
 import play.api.Play.current
 
-import org.hablapps.meetup.fun.logic
-import logic._
-import org.hablapps.meetup.common.logic.Domain._
-import org.hablapps.meetup.common.mysql.Domain._
+import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException
+import scala.slick.driver.MySQLDriver.simple._
 
 
 object Interpreter{
@@ -19,8 +16,6 @@ object Interpreter{
   def run[U](store: Store[U]): Either[StoreError, U] = store match {
     case Return(result) => 
       Right(result)
-    case Fail(error) => 
-      Left(error)
     case GetGroup(id: Int, next: (Group => Store[U])) => 
       DB.withSession { implicit session =>
         group_table.byID(Some(id)).firstOption.fold[Either[StoreError,U]](
@@ -30,7 +25,6 @@ object Interpreter{
         }
       }
     case GetUser(id: Int, next: (User => Store[U])) => 
-      // Thread.sleep(100)
       DB.withSession { implicit session =>
         user_table.byID(Some(id)).firstOption.fold[Either[StoreError,U]](
           Left[StoreError,U](NonExistentEntity(id))
