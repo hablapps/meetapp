@@ -2,30 +2,8 @@ package org.hablapps.meetup.fun.logic
 
 import org.hablapps.meetup.common.logic.Domain._
 
-sealed trait Store[+U]
-
-case class GetGroup[U](id: Int, next: Group => Store[U]) extends Store[U]
-case class GetUser[U](id: Int, next: User => Store[U]) extends Store[U]
-case class PutJoin[U](join: JoinRequest, next: JoinRequest => Store[U]) extends Store[U]
-case class PutMember[U](id: Member, next: Member => Store[U]) extends Store[U]
-case class Return[U](t: U) extends Store[U]
-case class Fail(error: StoreError) extends Store[Nothing]
-
-sealed class StoreError(val msg: String) extends RuntimeException
-
-case class NonExistentEntity(id: Int) extends StoreError(s"Non-existent entity $id")
-case class ConstraintFailed(constraint: Store[Boolean]) extends StoreError(s"Constraint failed: $constraint")
-case class GenericError(override val msg: String) extends StoreError(msg)
-
-  
 object Store{
   
-  def If[U,V](cond: => Boolean)(_then: Store[V], _else: Store[U]): Store[Either[V,U]] = 
-    if (cond) 
-      _then map (u => Left(u))
-    else
-      _else map (v => Right(v))
-
   def getGroup(id: Int): Store[Group] = 
     GetGroup(id, t => Return(t))
   
@@ -37,6 +15,12 @@ object Store{
 
   def putMember(t: Member): Store[Member] = 
     PutMember(t, t1 => Return(t1))
+
+  def If[U,V](cond: => Boolean)(_then: Store[V], _else: Store[U]): Store[Either[V,U]] = 
+    if (cond) 
+      _then map (u => Left(u))
+    else
+      _else map (v => Right(v))
 
   implicit class StoreOps[U](store: Store[U]){
 
@@ -58,22 +42,22 @@ object Store{
       case fail@Fail(_) => fail
     }
 
-    def unless(violation: Store[Boolean]): Store[U] = 
-      violation flatMap {
-        violated => if (violated)
-          Fail(ConstraintFailed(violation))
-        else 
-          store
-      }
-
-    def ||(cond2: Store[Boolean])(implicit e: U=:=Boolean): Store[Boolean] = 
-      store flatMap {
-        bool1 => 
-          if (bool1) Return(true)
-          else cond2
-      }
   }
 
-
-
 }
+
+sealed trait Store[+U]
+
+case class GetGroup[U](id: Int, next: Group => Store[U]) extends Store[U]
+case class GetUser[U](id: Int, next: User => Store[U]) extends Store[U]
+case class PutJoin[U](join: JoinRequest, next: JoinRequest => Store[U]) extends Store[U]
+case class PutMember[U](id: Member, next: Member => Store[U]) extends Store[U]
+case class Return[U](t: U) extends Store[U]
+case class Fail(error: StoreError) extends Store[Nothing]
+
+sealed class StoreError(val msg: String) extends RuntimeException
+
+case class NonExistentEntity(id: Int) extends StoreError(s"Non-existent entity $id")
+case class GenericError(override val msg: String) extends StoreError(msg)
+
+  
