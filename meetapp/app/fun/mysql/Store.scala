@@ -1,4 +1,4 @@
-package org.hablapps.meetup.functional.mysql
+package org.hablapps.meetup.fun.mysql
 
 import scala.reflect.{ClassTag, classTag}
 import scala.slick.driver.MySQLDriver.simple._
@@ -8,7 +8,7 @@ import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationExceptio
 import play.api.db.slick.DB
 import play.api.Play.current
 
-import org.hablapps.meetup.functional.logic
+import org.hablapps.meetup.fun.logic
 import logic._, logic.Domain._
 import Domain._
 

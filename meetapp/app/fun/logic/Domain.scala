@@ -1,4 +1,4 @@
-package org.hablapps.meetup.functional.logic
+package org.hablapps.meetup.fun.logic
 
 object Domain{
 

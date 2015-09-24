@@ -1,4 +1,4 @@
-package org.hablapps.meetup.functional
+package org.hablapps.meetup.fun
 
 import play.api._
 import play.api.mvc._
