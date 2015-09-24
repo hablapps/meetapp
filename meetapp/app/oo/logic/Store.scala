@@ -1,5 +1,6 @@
 package org.hablapps.meetup.oo.logic
 
+
 import org.hablapps.meetup.common.logic.Domain._
 
 trait Store{
@@ -17,7 +18,35 @@ trait Store{
 
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 sealed class StoreError(val msg: String) extends RuntimeException
 
 case class NonExistentEntity(id: Int) extends StoreError(s"Non-existent entity $id")
 case class GenericError(override val msg: String) extends StoreError(msg)
+

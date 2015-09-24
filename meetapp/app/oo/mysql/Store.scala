@@ -15,20 +15,15 @@ trait Store extends logic.Store{
 
 
 
+
   def getGroup(gid: Int): Group = 
     DB.withSession { implicit session =>
-      val maybeGroup = (for { 
-        group <- group_table if group.gid === gid
-      } yield group).firstOption
-      maybeGroup.get
+      group_table.byID(Some(gid)).firstOption.get
     }
    
   def getUser(uid: Int): User =  
     DB.withSession { implicit session =>
-      val maybeUser = (for {
-        user <- user_table if user.uid === uid
-      } yield user).firstOption
-      maybeUser.get
+      user_table.byID(Some(uid)).firstOption.get
     }
     
   def putJoin(join: JoinRequest): JoinRequest = 
@@ -42,6 +37,12 @@ trait Store extends logic.Store{
       val maybeId = member_table returning member_table.map(_.mid) += member
       member.copy(mid = maybeId)
     }
+
+
+
+
+
+
 
 
 
