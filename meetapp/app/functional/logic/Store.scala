@@ -23,11 +23,11 @@ case class GenericError(override val msg: String) extends StoreError(msg)
   
 object Store{
   
-  def If[U,V](cond: => Boolean)(_then: Store[V], _else: Store[U]): Store[Either[U,V]] = 
+  def If[U,V](cond: => Boolean)(_then: Store[V], _else: Store[U]): Store[Either[V,U]] = 
     if (cond) 
-      _then map (u => Right(u))
+      _then map (u => Left(u))
     else
-      _else map (v => Left(v))
+      _else map (v => Right(v))
 
   def getGroup(id: Int): Store[Group] = 
     GetGroup(id, t => Return(t))

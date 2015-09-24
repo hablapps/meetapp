@@ -2,17 +2,19 @@ package org.hablapps.meetup.oo.logic
 
 import Domain._
 
-trait Services{ self: Store => 
+trait Services{ Store: Store => 
   
   def join(request: JoinRequest): JoinResponse = {
     val JoinRequest(_, uid, gid) = request
     
-    val _ = getUser(uid)
-    val group = getGroup(gid)
-    if (group.must_approve) 
-      Left(putJoin(request))
-    else
-      Right(putMember(Member(None, uid, gid)))
+    val _ = Store.getUser(uid)
+    val group = Store.getGroup(gid)
+    val joinOrMember = 
+      if (group.must_approve) 
+        Left(Store.putJoin(request))
+      else
+        Right(Store.putMember(Member(None, uid, gid)))
+    joinOrMember
   }
 
 }
