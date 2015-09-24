@@ -1,6 +1,6 @@
-package org.hablapps.meetup.services
+package org.hablapps.meetup.logic
 
-import org.hablapps.meetup.{domain, store}, store._, domain._
+import Domain._
 
 trait Services{ self: Store => 
   

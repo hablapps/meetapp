@@ -1,7 +1,8 @@
-package org.hablapps.meetup.store.mysql
+package org.hablapps.meetup.mysql
 
-import org.hablapps.meetup.{domain, store}, domain._, store._
-import domain.mysql._
+import org.hablapps.meetup.logic, logic._
+import logic.Domain._
+import Domain._
 
 import play.api.Play.current
 import play.api.db.slick.DB
@@ -10,7 +11,7 @@ import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationExceptio
 import scala.slick.driver.MySQLDriver.simple._
 
 
-trait MySQLStore extends Store{
+trait Store extends logic.Store{
 
   def getGroup(gid: Int): Group = 
     DB.withSession { implicit session =>

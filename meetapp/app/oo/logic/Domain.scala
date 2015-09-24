@@ -1,6 +1,6 @@
-package org.hablapps.meetup
+package org.hablapps.meetup.logic
 
-package object domain{
+object Domain{
 
   case class User(
     uid: Option[Int],
