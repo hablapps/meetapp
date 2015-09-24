@@ -1,6 +1,6 @@
 package org.hablapps.meetup.oo.logic
 
-import Domain._
+import org.hablapps.meetup.common.logic.Domain._
 
 trait Store{
   def getGroup(gid: Int): Group

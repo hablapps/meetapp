@@ -1,8 +1,8 @@
-package org.hablapps.meetup.fun.mysql
+package org.hablapps.meetup.common.mysql
 
 object Domain{
 
-  import org.hablapps.meetup.fun.logic.Domain._
+  import org.hablapps.meetup.common.logic.Domain._
 
   import play.api.Play.current
   import play.api.db.slick.DB

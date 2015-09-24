@@ -9,8 +9,10 @@ import play.api.db.slick.DB
 import play.api.Play.current
 
 import org.hablapps.meetup.fun.logic
-import logic._, logic.Domain._
-import Domain._
+import logic._
+import org.hablapps.meetup.common.logic.Domain._
+import org.hablapps.meetup.common.mysql.Domain._
+
 
 object Interpreter{
 

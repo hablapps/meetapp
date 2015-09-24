@@ -1,6 +1,6 @@
 package org.hablapps.meetup.fun.logic
 
-import Domain._
+import org.hablapps.meetup.common.logic.Domain._
 
 object Services{ 
   

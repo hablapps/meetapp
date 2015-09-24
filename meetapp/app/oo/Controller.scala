@@ -6,7 +6,8 @@ import play.api._
 import play.api.mvc._
 import play.api.libs.json._
 
-import logic._, mysql._, logic.Domain._
+import org.hablapps.meetup.common.logic.Domain._
+import logic._, mysql._
 
 object Members extends Controller{
 

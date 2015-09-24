@@ -20,7 +20,8 @@ object Members extends Controller{
       toHTTP
     }
 
-  import logic._, Domain._
+  import org.hablapps.meetup.common.logic.Domain._
+  import logic._
 
   def fromHTTP(gid: Int): Request[Int] => JoinRequest = 
     request => JoinRequest(None, request.body, gid)

@@ -1,7 +1,7 @@
 package org.hablapps.meetup.fun.logic
 
 import scala.reflect.{ClassTag, classTag}
-import Domain._
+import org.hablapps.meetup.common.logic.Domain._
 
 sealed trait Store[+U]
 
