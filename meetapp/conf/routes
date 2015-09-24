@@ -1,3 +1,4 @@
 
 # Add members
-POST    /groups/:gid/members         org.hablapps.meetup.oo.controllers.Members.add(gid: Int)
+POST    /oo/groups/:gid/members         org.hablapps.meetup.oo.Members.add(gid: Int)
+POST    /fun/groups/:gid/members        org.hablapps.meetup.functional.Members.add(gid: Int)

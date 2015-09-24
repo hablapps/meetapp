@@ -1,5 +1,5 @@
-package org.hablapps.meetup.functional.mysql
+// package org.hablapps.meetup.functional.mysql
 
-import org.hablapps.meetup.functional.logic
+// import org.hablapps.meetup.functional.logic
 
-object Services extends logic.Services with Store
+// object Services extends logic.Services with Store
