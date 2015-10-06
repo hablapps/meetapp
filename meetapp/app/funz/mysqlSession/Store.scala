@@ -4,9 +4,6 @@ import org.hablapps.meetup.funz.logic, logic._
 import org.hablapps.meetup.common.logic.Domain._
 import org.hablapps.meetup.common.mysql.Domain._
 
-import play.api.db.slick.DB
-import play.api.Play.current
-
 import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException
 import scala.slick.driver.MySQLDriver.simple._
 
@@ -35,9 +32,7 @@ object Interpreter{
     }
   }
 
-  def run[U](store: Store[U]): U = 
-    DB.withSession { implicit session =>
-      store.foldMap(RunInstruction.apply)
-    }
+  def run[U](store: Store[U])(implicit session: Session): U = 
+    store.foldMap(RunInstruction.apply)
 
 }
