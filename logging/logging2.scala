@@ -1,3 +1,5 @@
+package ref
+
 /* 
   Reference module with a choice of impure functions.
 */
