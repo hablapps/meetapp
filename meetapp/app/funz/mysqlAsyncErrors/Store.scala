@@ -1,4 +1,4 @@
-package org.hablapps.meetup.funz.mysqlAsync
+package org.hablapps.meetup.funz.mysqlAsyncErrors
 
 import scala.concurrent.{ExecutionContext, Future}
 
