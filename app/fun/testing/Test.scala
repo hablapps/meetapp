@@ -57,18 +57,6 @@ class LogicSpec extends FlatSpec with Matchers {
       be(Right(Left(JoinRequest(Some(3),1,2))))
   }
 
-  it should "prohibirse si el usuario pertenece ya" in {
-
-    val store1 = Interpreter.MapStore(
-      User(Some(1), "user 1"),
-      Group(Some(2), "group 1", "CR", true),
-      Member(Some(3), 1, 2)
-    )
-
-    Interpreter.run(store1)(join(JoinRequest(None, 1, 2))) should 
-      be(Left(GenericError(s"already exists Member(None,1,2)")))
-  }
-
   it should "prohibirse si el usuario no pertenece ya, pero tiene una solicitud pendiente" in {
 
     val store1 = Interpreter.MapStore(

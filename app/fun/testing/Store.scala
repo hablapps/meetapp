@@ -82,15 +82,12 @@ object Interpreter{
     inst match {
       
       case GetUser(id) => 
-        println(s"--> GetUser($id)")
         (store, store.get[User](id))
       
       case GetGroup(id) => 
-        println(s"--> GetGroup($id)")
         (store, store.get[Group](id))
       
       case PutMember(member) => 
-        println(s"--> PutMember($member)")
         val result: Either[StoreError, (MapStore, Member)] = 
           for {
             _ <- store.get[User](member.uid).right
@@ -104,7 +101,6 @@ object Interpreter{
         )
   
       case PutJoin(request) => 
-        println(s"--> PutJoin($request)")
         val result: Either[StoreError, (MapStore, JoinRequest)] = 
           for {
             _ <- store.get[User](request.uid).right
