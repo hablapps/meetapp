@@ -52,9 +52,9 @@ case class Return[U](value: U) extends Store[U]
 case class StoreAndThen[U,V](inst: StoreInstruction[U], next: U => Store[V])
   extends Store[V]  
 
-sealed class StoreError(val msg: String) extends RuntimeException
+sealed class StoreError(val msg: String) extends Exception(msg)
 
 case class NonExistentEntity(id: Int) extends StoreError(s"Non-existent entity $id")
 case class GenericError(override val msg: String) extends StoreError(msg)
+case class WrapError(exception: Exception) extends StoreError(exception.getMessage)
 
-  
