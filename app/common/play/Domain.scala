@@ -1,6 +1,6 @@
 package org.hablapps.meetup.common.mysql
 
-object Domain{
+object MySqlDomain{
 
   import org.hablapps.meetup.common.logic.Domain._
 

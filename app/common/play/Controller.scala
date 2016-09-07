@@ -1,4 +1,4 @@
-package org.hablapps.meetup.funz.mysql
+package org.hablapps.meetup.common
 
 import scala.util.{Try, Success, Failure}
 
@@ -6,26 +6,15 @@ import play.api._
 import play.api.mvc._
 import play.api.libs.json._
 
-import org.hablapps.meetup.common.logic.Domain._
-import org.hablapps.meetup.funz.logic, logic._
+import logic.Domain._
 
-object Members extends Controller{
-
-  def add(gid: Int): Action[Int] =
-    Action(parse.json[Int]) { 
-      fromHTTP(gid)         andThen 
-      logic.Services.join   andThen
-      (program => Try(Interpreter.run(program))) andThen
-      toHTTP
-    }
+trait CommonController extends Controller{
 
   def fromHTTP(gid: Int): Request[Int] => JoinRequest = 
     request => JoinRequest(None, request.body, gid)
 
   def toHTTP(response: Try[JoinResponse]): Result = 
     response match {
-      case Failure(error@NonExistentEntity(id)) => 
-        NotFound(s"${error.msg}")
       case Failure(error) => 
         InternalServerError(error.toString)
       case Success(response) => response fold(
