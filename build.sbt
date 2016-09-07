@@ -1,6 +1,6 @@
 name := """meetapp"""
 
-scalaVersion := "2.11.8-tl-201604190743" // compile succeeds
+scalaVersion := "2.11.8"
 
 scalaBinaryVersion := "2.11"
 
@@ -19,7 +19,6 @@ scalacOptions ++= Seq(
   // "-Xprint:typer",
   // "-Xlog-implicit-conversions",
   "-language:postfixOps",
-  "-Yhigher-order-unification",
   "-language:higherKinds")
 
 resolvers ++= Seq(
