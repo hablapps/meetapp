@@ -1,14 +1,15 @@
 package org.hablapps.meetup.common.mysql
 
-object MySqlDomain{
+import play.api.Play
+import play.api.db.slick.DatabaseConfigProvider  
+import slick.driver.JdbcProfile
+
+object Domain{
 
   import org.hablapps.meetup.common.logic.Domain._
 
-  import play.api.Play.current
-  import play.api.db.slick.DB
-
-  import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException
-  import scala.slick.driver.MySQLDriver.simple._
+  val dbConfig = DatabaseConfigProvider.get[JdbcProfile](Play.current)
+  import dbConfig.driver.api._
 
   class GroupTable(tag: Tag) extends Table[Group](tag, "Groups") {
     def gid = column[Option[Int]]("gid", O.PrimaryKey, O.AutoInc)
@@ -39,7 +40,7 @@ object MySqlDomain{
     def * = (mid, uid, gid) <> (Member.tupled, Member.unapply)
   }
 
-  val member_table = TableQuery[MemberTable]
+  object member_table extends TableQuery[MemberTable](new MemberTable(_))
 
   class JoinTable(tag: Tag) extends Table[JoinRequest](tag, "Joins") {
     def jid = column[Option[Int]]("jid", O.PrimaryKey, O.AutoInc)
@@ -48,6 +49,6 @@ object MySqlDomain{
     def * = (jid, uid, gid) <> (JoinRequest.tupled, JoinRequest.unapply)
   }
 
-  val join_table = TableQuery[JoinTable]
+  object join_table extends TableQuery[JoinTable](new JoinTable(_))
 
 }

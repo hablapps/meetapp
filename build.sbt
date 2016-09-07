@@ -29,7 +29,7 @@ libraryDependencies ++= Seq(
   jdbc,
   cache,
   ws,
-  "com.typesafe.play" %% "play-slick" % "0.8.0",
+  "com.typesafe.play" %% "play-slick" % "1.0.1",
   "org.slf4j" % "slf4j-nop" % "1.6.4",
   "mysql" % "mysql-connector-java" % "5.1.26",
   "org.scala-lang" % "scala-compiler" % scalaVersion.value,

@@ -1,7 +1,6 @@
 package org.hablapps.meetup
 package fun
 package mysql
-package templates
 
 import scala.concurrent.{Await, Future, duration, ExecutionContext}
 import ExecutionContext.Implicits.global
@@ -11,11 +10,7 @@ import logic._
 import common.logic.Domain._
 import common.mysql.Domain._
 
-/**
- * Las modificaciones a realizar en el intérprete para adaptarse
- * a la versión asíncrona de Slick, no afectan a la API.
- */
-object FutureStore extends oo.logic.Store{
+object FutureStore extends Store[Future] {
   import dbConfig._, driver.api._
   
   // Operadores de Store
@@ -36,4 +31,7 @@ object FutureStore extends oo.logic.Store{
 
   // Operadores de composición
   
+  def returns[A](a: A): Future[A] = Future(a)
+  
+  def doAndThen[A, B](fa: Future[A])(f: A => Future[B]): Future[B] = fa.flatMap(f)
 }

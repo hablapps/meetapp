@@ -1,15 +1,21 @@
-package org.hablapps.meetup
-package oo
-package logic
+package org.hablapps.meetup.oo.logic
 
-import common.logic.Domain._
+import scala.concurrent.Future
 
-trait Store {
+import org.hablapps.meetup.common.logic.Domain._
 
-  def getGroup(gid: Int): Group
-  def getUser(uid: Int): User
-  def putJoin(join: JoinRequest): JoinRequest
-  def putMember(member: Member): Member
+trait Store{
+
+  def getGroup(gid: Int): Future[Group]
+  
+
+  def getUser(uid: Int): Future[User]
+  
+
+  def putJoin(join: JoinRequest): Future[JoinRequest]
+  
+
+  def putMember(member: Member): Future[Member]
 
 }
 

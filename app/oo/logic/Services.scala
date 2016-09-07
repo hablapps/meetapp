@@ -1,36 +1,20 @@
-package org.hablapps.meetup
-package oo
-package logic
+package org.hablapps.meetup.oo.logic
 
-import common.logic.Domain._
+import scala.concurrent.Future
+import scala.concurrent.ExecutionContext.Implicits.global
 
-trait Services { S: Store =>
+import org.hablapps.meetup.common.logic.Domain._
+
+trait Services{ Store: Store => 
     
-  def join(request: JoinRequest): JoinResponse = {
-    val _      = S.getUser(request.uid)
-    val group  = S.getGroup(request.gid) 
-    val result = Either.cond(
-      test  = group.must_approve, 
-      left  = S.putJoin(request), 
-      right = S.putMember(Member(None, request.uid, request.gid))
-    )
-    result
-  }
-
-  
-  // Esta versión muestra más claramente la correspondencia
-  // con la primera versión funcional (ServicesWithoutSugar)
-  def joinv2(request: JoinRequest): JoinResponse = {
-    val user   = S.getUser(request.uid);
-    val group  = S.getGroup(request.gid);
-    if (group.must_approve) {
-      val regJoin = S.putJoin(request)
-      Left(regJoin)
-    } else {
-      val regMember = S.putMember(Member(None, request.uid, request.gid))
-      Right(regMember)
-    }
-  }
-
+  def join(request: JoinRequest): Future[JoinResponse] = for {
+    _ <- Store.getUser(request.uid)
+    group <- Store.getGroup(request.gid)
+    result <- if (group.must_approve)
+      Store.putJoin(request) map (r => Left(r))
+    else 
+      Store.putMember(Member(None, request.uid, request.gid)) map (m => Right(m))
+  } yield result
 
 }
+
