@@ -1,8 +1,8 @@
-name := """aula-virtual"""
+name := """meetapp"""
 
-version := "1.0-SNAPSHOT"
+scalaVersion := "2.11.8"
 
-scalaVersion := "2.11.1"
+scalaBinaryVersion := "2.11"
 
 lazy val root = (project in file(".")).enablePlugins(PlayScala)
 
@@ -10,9 +10,23 @@ mainClass in Compile := Some("SimpleExample")
 
 scalaSource in Test := baseDirectory.value / "app" / "fun" / "testing"
 
+addCompilerPlugin("org.spire-math" %% "kind-projector" % "0.7.1")
+
+scalacOptions ++= Seq(
+  "-unchecked",
+  "-deprecation",
+  "-feature",
+  // "-Xprint:typer",
+  // "-Xlog-implicit-conversions",
+  "-language:postfixOps",
+  "-language:higherKinds")
+
+resolvers ++= Seq(
+  "scalatl" at "http://milessabin.com/scalatl"
+)
+
 libraryDependencies ++= Seq(
   jdbc,
-  anorm,
   cache,
   ws,
   "com.typesafe.play" %% "play-slick" % "0.8.0",

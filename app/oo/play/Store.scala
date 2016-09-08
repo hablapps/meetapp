@@ -1,20 +1,18 @@
-package org.hablapps.meetup.oo.mysql
+package org.hablapps.meetup
+package oo
+package play
 
-import org.hablapps.meetup.oo.logic, logic._
-import org.hablapps.meetup.common.logic.Domain._
-import org.hablapps.meetup.common.mysql.Domain._
+import logic._
+import common.logic.Domain._
+import common.mysql.MySqlDomain._
 
-import play.api.Play.current
-import play.api.db.slick.DB
+import _root_.play.api.Play.current
+import _root_.play.api.db.slick.DB
 
-import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException
 import scala.slick.driver.MySQLDriver.simple._
 
 
-trait Store extends logic.Store{
-
-
-
+trait Store extends logic.Store {
 
   def getGroup(gid: Int): Group = 
     DB.withSession { implicit session =>
@@ -38,14 +36,4 @@ trait Store extends logic.Store{
       member.copy(mid = maybeId)
     }
 
-
-
-
-
-
-
-
-
 }
-
-
